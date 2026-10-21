@@ -9,6 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Ordenar archivos
+        run: |
+          mkdir -p www/imagenes assets
+          mv index.html www/
+          cp logo.png www/imagenes/
+          mv *.jpeg logo.png www/imagenes/
+          mv icon.png icon-only.png assets/
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
