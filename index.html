@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0f1724">
+<title>HelpUs</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--text:#12202b;--muted:#6b7280;--primary:#0f1724;--accent:#0b62d6;--soft:#eef4fa;--danger:#ef4444;
+--top:env(safe-area-inset-top,0px);--bot:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);background:#f6f9fc;display:flex;flex-direction:column;overflow:hidden}
+header{background:var(--primary);color:#fff;padding:calc(10px + var(--top)) 16px 10px;display:flex;align-items:center;gap:10px}
+header img{width:38px;height:38px;border-radius:10px;background:#fff;padding:3px}
+header h1{font-size:18px;margin:0;flex:1}
+.login{background:#fff;color:var(--primary);border:0;border-radius:18px;padding:7px 12px;font-weight:700;font-size:13px}
+main{flex:1;overflow-y:auto;padding:14px 14px 20px}
+.tab{display:none}.tab.active{display:block}
+nav{display:flex;background:#fff;border-top:1px solid #e6eef6;padding-bottom:var(--bot)}
+nav button{flex:1;border:0;background:none;padding:9px 0 7px;font-size:11px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
+nav button .ic{font-size:21px}
+nav button.active{color:var(--accent);font-weight:700}
+.badge{position:absolute;top:4px;left:calc(50% + 6px);background:var(--danger);color:#fff;border-radius:10px;font-size:10px;min-width:17px;padding:1px 4px;display:none}
+input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #dbe6f1;background:#fff;font-size:15px;font-family:inherit;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+textarea{min-height:90px;resize:vertical}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+.search{display:flex;gap:8px;margin-bottom:10px}
+.search select{width:46%}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:4px}
+.chip{flex:0 0 auto;padding:7px 13px;border-radius:18px;border:1px solid #dbe6f1;background:#fff;font-size:13px}
+.chip.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(18,32,43,.06);display:flex;flex-direction:column}
+.card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--soft)}
+.cb{padding:10px;display:flex;flex-direction:column;gap:4px;flex:1}
+.cb h3{font-size:14px;margin:0}
+.origin{align-self:flex-start;background:#eef7ff;color:var(--accent);padding:3px 8px;border-radius:10px;font-weight:700;font-size:11px}
+.price{font-weight:800;font-size:16px}.eta{font-size:12px;color:var(--muted)}
+.acts{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.btn{border:0;border-radius:10px;padding:10px;font-weight:700;font-size:13px}
+.b-add{background:var(--primary);color:#fff;flex:1}
+.b-cmp{background:#fff;border:1px solid #cfe0f5;color:var(--primary)}
+.cart-item{display:flex;gap:10px;align-items:center;background:#fff;border-radius:12px;padding:10px;margin-bottom:10px}
+.cart-item img{width:56px;height:56px;border-radius:8px;object-fit:cover}
+.ci{flex:1;min-width:0}.ci b{font-size:14px}.ci small{display:block;color:var(--muted);font-size:12px}
+.qty{display:flex;align-items:center;gap:8px;margin-top:6px}
+.qty button{width:28px;height:28px;border-radius:8px;border:1px solid #dbe6f1;background:#fff;font-size:16px}
+.total{display:flex;justify-content:space-between;font-size:19px;font-weight:800;margin:14px 0}
+.primary{width:100%;background:var(--primary);color:#fff;border:0;border-radius:12px;padding:14px;font-weight:800;font-size:15px}
+.empty{color:var(--muted);text-align:center;padding:40px 10px}
+h2{font-size:18px;margin:4px 0 10px}
+.review{background:#fff;border-radius:12px;padding:12px;margin-top:10px}
+.stars{color:#f59e0b}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.link{background:none;border:0;color:var(--danger);font-size:13px}
+.back{position:fixed;inset:0;background:rgba(8,10,12,.5);display:none;align-items:flex-end;z-index:20}
+.back.show{display:flex}
+.sheet{background:#fff;width:100%;max-height:88%;overflow-y:auto;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + var(--bot))}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sheet-h h3{margin:0;font-size:17px}
+.x{border:0;background:var(--soft);border-radius:50%;width:32px;height:32px;font-size:16px}
+.cmp{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--soft)}
+.cmp img{width:48px;height:48px;border-radius:8px;object-fit:cover}
+.cmp .p{margin-left:auto;text-align:right;font-weight:800}
+.best{color:#16a34a;font-size:11px;font-weight:700}
+.summary{background:#f6f9fc;border-radius:10px;padding:10px;font-size:13px;margin-bottom:6px}
+.ok{text-align:center;padding:24px 8px}.ok .big{font-size:54px}
+.toast{position:fixed;left:50%;bottom:calc(76px + var(--bot));transform:translateX(-50%);background:#0f1724;color:#fff;padding:10px 16px;border-radius:20px;font-size:13px;z-index:30;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90%}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <img src="imagenes/logo.png" alt="HelpUs">
+  <h1>HelpUs</h1>
+  <button class="login" id="loginBtn">Iniciar sesión</button>
+</header>
+
+<main>
+  <section class="tab active" id="tab-home">
+    <div class="search">
+      <input id="q" type="search" placeholder="Buscar producto...">
+      <select id="source">
+        <option value="all">Todas</option><option>Rappi</option><option value="Didi">Didi Food</option>
+        <option>Falabella</option><option>iFood</option><option>Éxito</option>
+      </select>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="tab" id="tab-cart">
+    <h2>Tu carrito</h2>
+    <div id="cartList"></div>
+    <div id="cartFoot"></div>
+  </section>
+
+  <section class="tab" id="tab-reviews">
+    <h2>Reseñas</h2>
+    <form id="rForm">
+      <input id="rName" placeholder="Tu nombre" required>
+      <label>Calificación</label>
+      <select id="rRating" required>
+        <option value="">Selecciona</option><option value="5">5 — Excelente</option><option value="4">4 — Muy bueno</option>
+        <option value="3">3 — Bueno</option><option value="2">2 — Regular</option><option value="1">1 — Malo</option>
+      </select>
+      <label>Comentario</label>
+      <textarea id="rText" placeholder="Cuéntanos tu experiencia..." required></textarea>
+      <div class="row" style="margin-top:10px">
+        <button type="button" class="btn b-cmp" id="rExample">Ejemplo</button>
+        <button class="btn b-add">Enviar reseña</button>
+      </div>
+    </form>
+    <div id="rList"></div>
+    <div style="text-align:center;margin-top:12px"><button class="link" id="rClear">Borrar todas</button></div>
+  </section>
+</main>
+
+<nav>
+  <button class="active" data-tab="home"><span class="ic">🏠</span>Catálogo</button>
+  <button data-tab="cart"><span class="ic">🛒</span>Carrito<span class="badge" id="badge">0</span></button>
+  <button data-tab="reviews"><span class="ic">⭐</span>Reseñas</button>
+</nav>
+
+<div class="back" id="back"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const products=[
+ {id:1,name:'Arroz Premium 1kg',origin:'Rappi',price:4200,eta:'25-35 min',img:'imagenes/arroz_rappi.jpeg',desc:'Arroz de alta calidad.'},
+ {id:2,name:'Arroz Premium 1kg',origin:'Didi',price:4000,eta:'30-40 min',img:'imagenes/arroz_didi.jpeg',desc:'Presentación 1kg con empaque reforzado.'},
+ {id:3,name:'Audífonos Bluetooth',origin:'Falabella',price:52000,eta:'1-3 días',img:'imagenes/audifonosbluetooth_falabella.jpeg',desc:'Sonido estéreo.'},
+ {id:4,name:'Audífonos Bluetooth',origin:'Rappi',price:49900,eta:'1-3 días',img:'imagenes/audifonosbluetooth_rappi.jpeg',desc:'Diseño ergonómico.'},
+ {id:5,name:'Empanadas (4)',origin:'Rappi',price:12000,eta:'20-30 min',img:'imagenes/empanadas_rappi.jpeg',desc:'Empanadas doradas.'},
+ {id:6,name:'Empanadas (4)',origin:'iFood',price:11000,eta:'20-30 min',img:'imagenes/empanadas_ifood.jpeg',desc:'Recién preparadas.'},
+ {id:7,name:'Café Molido 250g',origin:'Éxito',price:9500,eta:'2-4 días',img:'imagenes/cafe_exito.jpeg',desc:'Tueste medio.'},
+ {id:8,name:'Café Molido 250g',origin:'Falabella',price:11000,eta:'2-4 días',img:'imagenes/cafe_falabella.jpeg',desc:'Mezcla premium.'}
+];
+const $=id=>document.getElementById(id);
+const money=n=>'$'+n.toLocaleString('es-CO');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function load(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+let cart=load('helpus_cart',[]);   // [{id,qty}]
+let reviews=load('helpus_reviews',[]);
+let user=load('helpus_user',null);
+let chip='all';
+
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1600)}
+function openSheet(html){$('sheet').innerHTML=html;$('back').classList.add('show')}
+function closeSheet(){$('back').classList.remove('show')}
+$('back').addEventListener('click',e=>{if(e.target===$('back'))closeSheet()});
+
+/* Navegación */
+function go(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.id==='tab-'+tab));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  $('tab-'+tab).scrollIntoView();
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.tab));
+
+/* Catálogo */
+const cats=[['all','Todo'],['arroz','Arroz'],['audífonos','Audífonos'],['empanadas','Empanadas'],['café','Café']];
+function renderChips(){
+  $('chips').innerHTML=cats.map(([k,l])=>`<button class="chip ${chip===k?'on':''}" data-k="${k}">${l}</button>`).join('');
+  $('chips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{chip=b.dataset.k;renderChips();renderList()});
+}
+function renderList(){
+  const q=$('q').value.trim().toLowerCase(),s=$('source').value;
+  const list=products.filter(p=>
+    (!q||p.name.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q))&&
+    (s==='all'||p.origin===s)&&(chip==='all'||p.name.toLowerCase().includes(chip)));
+  $('grid').innerHTML=list.length?list.map(p=>`
+   <div class="card"><img src="${p.img}" alt="${esc(p.name)}" loading="lazy">
+    <div class="cb"><span class="origin">${esc(p.origin)}</span><h3>${esc(p.name)}</h3>
+     <div class="price">${money(p.price)}</div><div class="eta">${esc(p.eta)}</div>
+     <div class="acts"><button class="btn b-cmp" data-cmp="${p.id}">⚖️</button><button class="btn b-add" data-add="${p.id}">Agregar</button></div>
+    </div></div>`).join(''):'<div class="empty" style="grid-column:1/-1">No se encontraron productos.</div>';
+  $('grid').querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addToCart(+b.dataset.add));
+  $('grid').querySelectorAll('[data-cmp]').forEach(b=>b.onclick=()=>compare(+b.dataset.cmp));
+}
+$('q').oninput=renderList;$('source').onchange=renderList;
+
+/* Comparador */
+function compare(id){
+  const name=products.find(p=>p.id===id).name;
+  const rows=products.filter(p=>p.name===name).sort((a,b)=>a.price-b.price);
+  openSheet(`<div class="sheet-h"><h3>Comparar: ${esc(name)}</h3><button class="x" onclick="closeSheet()">✕</button></div>`+
+   rows.map((r,i)=>`<div class="cmp"><img src="${r.img}"><div><b>${esc(r.origin)}</b>${i===0?'<div class="best">MÁS BARATO</div>':''}<div class="eta">${esc(r.eta)}</div></div>
+   <div class="p">${money(r.price)}<br><button class="btn b-add" style="margin-top:4px;padding:6px 10px" onclick="addToCart(${r.id});closeSheet()">Agregar</button></div></div>`).join(''));
+}
+
+/* Carrito */
+function addToCart(id){
+  const it=cart.find(c=>c.id===id);it?it.qty++:cart.push({id,qty:1});
+  save('helpus_cart',cart);renderCart();toast('✔ '+products.find(p=>p.id===id).name+' agregado');
+}
+function setQty(id,d){
+  const it=cart.find(c=>c.id===id);if(!it)return;
+  it.qty+=d;if(it.qty<=0)cart=cart.filter(c=>c.id!==id);
+  save('helpus_cart',cart);renderCart();
+}
+const cartTotal=()=>cart.reduce((s,c)=>s+products.find(p=>p.id===c.id).price*c.qty,0);
+function renderCart(){
+  const n=cart.reduce((s,c)=>s+c.qty,0);
+  $('badge').textContent=n;$('badge').style.display=n?'block':'none';
+  if(!cart.length){$('cartList').innerHTML='<div class="empty">Tu carrito está vacío 🛒</div>';$('cartFoot').innerHTML='';return}
+  $('cartList').innerHTML=cart.map(c=>{const p=products.find(x=>x.id===c.id);return `
+   <div class="cart-item"><img src="${p.img}"><div class="ci"><b>${esc(p.name)}</b><small>${esc(p.origin)} • ${esc(p.eta)}</small>
+   <div class="qty"><button data-d="-1" data-id="${p.id}">−</button><b>${c.qty}</b><button data-d="1" data-id="${p.id}">+</button></div></div>
+   <b>${money(p.price*c.qty)}</b></div>`}).join('');
+  $('cartList').querySelectorAll('.qty button').forEach(b=>b.onclick=()=>setQty(+b.dataset.id,+b.dataset.d));
+  $('cartFoot').innerHTML=`<div class="total"><span>Total</span><span>${money(cartTotal())}</span></div>
+   <button class="primary" onclick="checkout()">Proceder al pago</button><p class="eta" style="text-align:center">Prototipo: el pago es simulado.</p>`;
+}
+
+/* Checkout */
+function checkout(){
+  const list=cart.map(c=>{const p=products.find(x=>x.id===c.id);return `• ${esc(p.name)} (${esc(p.origin)}) ×${c.qty} — ${money(p.price*c.qty)}`}).join('<br>');
+  openSheet(`<div class="sheet-h"><h3>Completa el pago</h3><button class="x" onclick="closeSheet()">✕</button></div>
+  <div class="summary">${list}<div style="margin-top:6px"><b>Total: ${money(cartTotal())}</b></div></div>
+  <form id="payForm">
+   <label>Nombre del titular</label><input id="cName" required value="${esc(user||'')}" placeholder="Como aparece en la tarjeta">
+   <label>Método de pago</label>
+   <select id="method" required><option value="">Selecciona</option><option value="card">Tarjeta débito / crédito</option><option value="pse">PSE / Transferencia</option><option value="cash">Contra entrega</option></select>
+   <div id="bankBox"><label>Banco / Proveedor</label><select id="bank"><option value="">Selecciona</option><option>Bancolombia</option><option>Banco de Bogotá</option><option>Davivienda</option><option>BBVA Colombia</option><option>Banco Caja Social</option><option>Nequi</option><option>Daviplata</option></select></div>
+   <div id="cardBox" style="display:none"><label>Número de tarjeta</label><input id="cardNum" inputmode="numeric" maxlength="19" placeholder="XXXX XXXX XXXX XXXX">
+    <div class="row"><input id="exp" placeholder="MM/AA" maxlength="5" inputmode="numeric"><input id="cvv" placeholder="CVV" maxlength="4" inputmode="numeric"></div></div>
+   <button class="primary" style="margin-top:16px">Confirmar pago</button>
+  </form>`);
+  $('method').onchange=()=>{const m=$('method').value;$('cardBox').style.display=m==='card'?'block':'none';$('bankBox').style.display=m==='cash'?'none':'block'};
+  $('cardNum').oninput=e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,16).replace(/(.{4})/g,'$1 ').trim();
+  $('payForm').onsubmit=e=>{
+    e.preventDefault();
+    const m=$('method').value;
+    if(m!=='cash'&&!$('bank').value)return toast('Selecciona un banco');
+    if(m==='card'&&$('cardNum').value.replace(/\s/g,'').length<16)return toast('Revisa el número de tarjeta');
+    const name=$('cName').value.trim(),order='HU-'+Math.floor(100000+Math.random()*900000);
+    cart=[];save('helpus_cart',cart);renderCart();
+    openSheet(`<div class="ok"><div class="big">✅</div><h3>¡Pago exitoso!</h3><p>Gracias por tu compra, ${esc(name)}.<br>Pedido <b>${order}</b></p><button class="primary" onclick="closeSheet();go('home')">Volver al catálogo</button></div>`);
+  };
+}
+
+/* Reseñas */
+function renderReviews(){
+  $('rList').innerHTML=reviews.length?reviews.slice().reverse().map(r=>`<div class="review"><b>${esc(r.name)}</b> <span class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span><div style="margin-top:6px">${esc(r.text)}</div></div>`).join(''):'<div class="empty">Aún no hay reseñas.</div>';
+}
+$('rForm').onsubmit=e=>{
+  e.preventDefault();
+  reviews.push({name:$('rName').value.trim(),rating:+$('rRating').value,text:$('rText').value.trim()});
+  save('helpus_reviews',reviews);renderReviews();$('rForm').reset();toast('Gracias por tu reseña 😊');
+};
+$('rExample').onclick=()=>{$('rName').value='María';$('rRating').value='5';$('rText').value='Muy útil y rápida para comparar precios.'};
+$('rClear').onclick=()=>{if(confirm('¿Borrar TODAS las reseñas?')){reviews=[];save('helpus_reviews',reviews);renderReviews()}};
+
+/* Login simulado */
+function renderLogin(){$('loginBtn').textContent=user?('👤 '+user.split(' ')[0]):'Iniciar sesión'}
+$('loginBtn').onclick=()=>{
+  if(user)return openSheet(`<div class="sheet-h"><h3>Hola, ${esc(user)}</h3><button class="x" onclick="closeSheet()">✕</button></div>
+    <button class="primary" onclick="user=null;save('helpus_user',null);renderLogin();closeSheet();toast('Sesión cerrada')">Cerrar sesión</button>`);
+  openSheet(`<div class="sheet-h"><h3>Iniciar sesión</h3><button class="x" onclick="closeSheet()">✕</button></div>
+   <form id="lForm"><label>Nombre</label><input id="lName" required placeholder="Tu nombre"><label>Correo</label><input type="email" required placeholder="correo@ejemplo.com">
+   <label>Contraseña</label><input type="password" required placeholder="••••••••"><button class="primary" style="margin-top:16px">Entrar</button></form><p class="eta">Inicio de sesión simulado.</p>`);
+  $('lForm').onsubmit=e=>{e.preventDefault();user=$('lName').value.trim();save('helpus_user',user);renderLogin();closeSheet();toast('¡Bienvenida, '+user+'!')};
+};
+
+renderChips();renderList();renderCart();renderReviews();renderLogin();
+</script>
+</body>
+</html>
